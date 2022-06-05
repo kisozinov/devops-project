@@ -30,7 +30,7 @@ jobs:
       - name: print env
         run: env
       
-  env:
+  build:
     runs-on: windows-latest
     env:
       local_env: job_print_env
@@ -38,6 +38,19 @@ jobs:
     steps:
       - uses: actions/checkout@v3
     
-      - name: print env
-        run: env
+      - name: build
+        run: |
+          sleep 15
+          echo "Test build" >> build.txt
+          
+        
+  test:
+    runs-on: windows-latest
     
+    steps:
+      - name: run_test
+        run: sleep 20
+  #export:
+    #runs-on: windows-latest
+    
+  
