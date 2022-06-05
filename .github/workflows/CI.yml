@@ -40,8 +40,8 @@ jobs:
     
       - name: build
         run: |
-          g++ main.cpp -o app_$RUNNER_OS_ver.$GITHUB_RUN_NUMBER
-          ./app_$RUNNER_OS_ver.$GITHUB_RUN_NUMBER
+          g++ main.cpp -o app_${{ runner_os }}_ver.${{ github.run_number }}
+          ./app_${{ runner_os }}_ver.${{ github.run_number }}
         
   test:
     runs-on: windows-latest
