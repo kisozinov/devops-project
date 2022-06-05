@@ -36,5 +36,8 @@ jobs:
       local_env: job_print_env
     
     steps:
+      - uses: actions/checkout@v3
+    
       - name: print env
         run: env
+    
