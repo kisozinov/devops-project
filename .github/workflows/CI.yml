@@ -46,7 +46,7 @@ jobs:
         
   test:
     runs-on: windows-latest
-    
+    needs: [sys_info, build]
     steps:
       - name: run_test
         run: sleep 20
