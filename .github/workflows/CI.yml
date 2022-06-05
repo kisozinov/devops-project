@@ -8,10 +8,14 @@ on:
 
   workflow_dispatch:
 
+env:
+  global_env: global
+
 jobs:
   sys_info:
     runs-on: windows-latest
-
+    env:
+      local_env: $GITHUB_JOB
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
@@ -23,9 +27,13 @@ jobs:
         run: |
           pwd
           ls
+      - name: print env
+        run: env
       
   env:
     runs-on: windows-latest
+    env:
+      local_env: job_print_env
     
     steps:
       - name: print env
