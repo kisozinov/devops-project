@@ -19,29 +19,27 @@ jobs:
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
-
-      - name: Run a one-line script
-        run: echo Hello, world!
         
-      - name: Run a multi-line script
+      - name: working directory
         run: |
           pwd
           ls
       - name: print env
         run: env
+      - name : check tools
+        run: g++ -v
       
   build:
     runs-on: windows-latest
-    env:
-      local_env: job_print_env
+    needs: [sys_info]
+   # env:
+    #  local_env: job_print_env
     
     steps:
       - uses: actions/checkout@v3
     
       - name: build
-        run: |
-          sleep 15
-          echo "Test build" >> build.txt
+        run: g++ main.cpp -o app_$ImageOS
           
         
   test:
