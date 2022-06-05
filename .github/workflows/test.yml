@@ -22,11 +22,11 @@ jobs:
       - name: Run a multi-line script
         run: |
           pwd
-          dir
+          ls
       
   env:
     runs-on: windows-latest
     
     steps:
       - name: print env
-        run: set
+        run: ls env
