@@ -39,8 +39,9 @@ jobs:
       - uses: actions/checkout@v3
     
       - name: build
-        run: g++ main.cpp -o app_windows
-          
+        run: |
+          g++ main.cpp -o app_${RUNNER_OS}_ver.${GITHUB_RUN_NUMBER}
+          ls -la
         
   test:
     runs-on: windows-latest
