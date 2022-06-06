@@ -1,0 +1,123 @@
+name: CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+  workflow_dispatch:
+
+env:
+  artifact_name: app-ver-${{ github.sha }}
+
+jobs:
+#   sys_info:
+#     runs-on: windows-latest
+#     env:
+#       local_env: ${{ github.job }}
+#     steps:
+#       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+#       - uses: actions/checkout@v3
+        
+#       - name: working directory
+#         run: |
+#           pwd
+#           ls
+#       - name: print env
+#         run: env
+#       - name : check tools
+#         run: g++ -v
+#       - name: Dump runner context
+#         env:
+#           RUNNER_CONTEXT: ${{ toJson(runner) }}
+#         run: echo "$RUNNER_CONTEXT"
+      
+  build-win:
+    runs-on: windows-2022
+    # needs: [sys_info]
+    
+    steps:
+      - uses: actions/checkout@v3
+      - uses: ilammy/msvc-dev-cmd@v1
+      - name: build
+        run: |
+          cl /EHsc main.cpp
+      - name: Download a Build Artifact
+        uses: actions/upload-artifact@v3.0.0
+        with:
+          name: ${{ env.artifact_name }}
+          path: main.exe
+          retention-days: 1
+          
+  build-ubuntu-macos:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-20.04, macos-11]
+        gcc_o: ["-O3"] 
+    env:
+      app_name: app-${{ matrix.os }}${{ matrix.gcc_o }}-ver.${{ github.run_number }}
+    
+    steps:
+      - uses: actions/checkout@v3
+      - name: build
+        run: |
+          g++ main.cpp ${{ matrix.gcc_o }} -o ${{ env.app_name }}
+          ./${{ env.app_name }}
+      - name: Download a Build Artifact
+        uses: actions/upload-artifact@v3.0.0
+        with:
+          name: ${{ env.artifact_name }}
+          path: ${{ env.app_name }}
+          retention-days: 1
+  
+  report:
+    if: failure()
+    runs-on: ubuntu-20.04
+    needs: [ build-win, build-ubuntu-macos]
+    steps:
+      - name: send telegram message on push
+        uses: appleboy/telegram-action@master
+        with:
+          to: ${{ secrets.TELEGRAM_TO }}
+          token: ${{ secrets.TELEGRAM_TOKEN }}
+          message: |
+            ❌${{ github.actor }} created commit at ${{ github.created_at }}
+            Commit message: ${{ github.comment }}
+            Repository: ${{ github.repository }}
+            See changes: https://github.com/${{ github.repository }}/commit/${{github.sha}}
+      
+  export:
+    runs-on: ubuntu-20.04
+    needs: [ build-win, build-ubuntu-macos]
+    steps:
+      - name: Download a Build Artifact
+        uses: actions/download-artifact@v3.0.0
+        with:
+          name: ${{ env.artifact_name }}
+      - name: send telegram message on push
+        uses: appleboy/telegram-action@master
+        with:
+          to: ${{ secrets.TELEGRAM_TO }}
+          token: ${{ secrets.TELEGRAM_TOKEN }}
+          document: app-**, main.exe
+          photo: hello-world.png
+          message: |
+            ✅${{ github.actor }} created commit at ${{ github.event.created_at }}
+            Commit message: ${{ github.event.action }}
+            Repository: ${{ github.repository }}
+            See changes: https://github.com/${{ github.repository }}/commit/${{github.sha}}
+          
+          
+
+#   test:
+#     runs-on: windows-latest
+#     needs: [sys_info, build]
+#     steps:
+#       - name: run_test
+#         run: sleep 20
+  #export:
+    #runs-on: windows-latest
+    
+  
