@@ -83,11 +83,9 @@ jobs:
           to: ${{ secrets.TELEGRAM_TO }}
           token: ${{ secrets.TELEGRAM_TOKEN }}
           message: |
-            ${{ github.actor }} created commit:
-            Commit message: ${{ github.event.commits[0].message }}
-            
+            ❌${{ github.actor }} created commit at ${{ github.event.created_at }}
+            Commit message: ${{ github.event.payload.comment }}
             Repository: ${{ github.repository }}
-            
             See changes: https://github.com/${{ github.repository }}/commit/${{github.sha}}
       
   export:
@@ -103,10 +101,10 @@ jobs:
         with:
           to: ${{ secrets.TELEGRAM_TO }}
           token: ${{ secrets.TELEGRAM_TOKEN }}
-          document: ${{ env.artifact_name }}
+          document: app-**
           message: |
-            💹${{ github.actor }} created commit:
-            Commit message: ${{ github.event.head_commit.message }}
+            ✔️${{ github.actor }} created commit at ${{ github.event.created_at }}
+            Commit message: ${{ github.event.payload.comment }}
             Repository: ${{ github.repository }}
             See changes: https://github.com/${{ github.repository }}/commit/${{github.sha}}
           
