@@ -9,7 +9,7 @@ on:
   workflow_dispatch:
 
 env:
-  global_env: global
+  artifact_name: app-ver-${{ github.sha }}
 
 jobs:
 #   sys_info:
@@ -46,7 +46,7 @@ jobs:
       - name: Download a Build Artifact
         uses: actions/upload-artifact@v3.0.0
         with:
-          name: my_app
+          name: ${{ env.artifact_name }}
           path: main.exe
           retention-days: 1
           
@@ -68,11 +68,12 @@ jobs:
       - name: Download a Build Artifact
         uses: actions/upload-artifact@v3.0.0
         with:
-          name: my_app
+          name: ${{ env.artifact_name }}
           path: ${{ env.app_name }}
           retention-days: 1
   
   report:
+    if: failure()
     runs-on: ubuntu-20.04
     needs: [ build-win, build-ubuntu-macos]
     steps:
@@ -89,6 +90,27 @@ jobs:
             
             See changes: https://github.com/${{ github.repository }}/commit/${{github.sha}}
       
+  export:
+    runs-on: ubuntu-20.04
+    needs: [ build-win, build-ubuntu-macos]
+    steps:
+      - name: Download a Build Artifact
+        uses: actions/download-artifact@v3.0.0
+        with:
+          name: ${{ env.artifact_name }}
+      - name: send telegram message on push
+        uses: appleboy/telegram-action@master
+        with:
+          to: ${{ secrets.TELEGRAM_TO }}
+          token: ${{ secrets.TELEGRAM_TOKEN }}
+          document: ${{ env.artifact_name }}
+          message: |
+            💹${{ github.actor }} created commit:
+            Commit message: ${{ github.event.head_commit.message }}
+            Repository: ${{ github.repository }}
+            See changes: https://github.com/${{ github.repository }}/commit/${{github.sha}}
+          
+          
 
 #   test:
 #     runs-on: windows-latest
