@@ -65,7 +65,7 @@ jobs:
         uses: actions/upload-artifact@v3.0.0
         with:
           name: my_app
-          path: app_${{ runner.os }}_ver.${{ github.run_number }}
+          path: app_**
           retention-days: 1
           
 
