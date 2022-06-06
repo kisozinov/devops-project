@@ -53,7 +53,7 @@ jobs:
         os: [ubuntu-latest, macos-latest]
         gcc_o: ["-O0", "-O3"] 
     env:
-      app_name: app-${RUNNER_OS}${{ matrix.gcc_o }}_ver.${GITHUB_RUN_NUMBER}
+      app_name: app-${{ RUNNER_OS }}${{ matrix.gcc_o }}_ver.${{ GITHUB_RUN_NUMBER }}
     # needs: [sys_info]
     
     steps:
