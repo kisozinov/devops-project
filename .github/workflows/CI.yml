@@ -51,6 +51,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest, macos-latest]
+        gcc_o: ["-O0", "-O3"] 
     # needs: [sys_info]
     
     steps:
@@ -58,8 +59,8 @@ jobs:
     
       - name: build
         run: |
-          g++ main.cpp -o app_${{ runner.os }}_ver.${{ github.run_number }}
-          ./app_${{ runner.os }}_ver.${{ github.run_number }}
+          g++ main.cpp ${{ matrix.gcc_o }} -o app_${{ runner.os }}${{ matrix.gcc_o }}_ver.${{ github.run_number }}
+          ./app_${{ runner.os }}${{ matrix.gcc_o }}_ver.${{ github.run_number }}
       - name: Download a Build Artifact
         uses: actions/upload-artifact@v3.0.0
         with:
