@@ -38,13 +38,13 @@ jobs:
     
       - name: build
         run: |
-          g++ main.cpp -o app_${{ runner.os }}_ver.${{ github.run_number }}
-          ./app_${{ runner.os }}_ver.${{ github.run_number }}
+          cl main.cpp -o app_${{ runner.os }}_ver.${{ github.run_number }}
       - name: Download a Build Artifact
         uses: actions/upload-artifact@v3.0.0
         with:
           name: my_app
-          path: app_${{ runner.os }}_ver.${{ github.run_number }}
+          path: main.exe
+          retention-days: 1
           
   build-ubuntu:
     runs-on: ubuntu-latest
@@ -62,6 +62,7 @@ jobs:
         with:
           name: my_app
           path: app_${{ runner.os }}_ver.${{ github.run_number }}
+          retention-days: 1
           
   build-macos:
     runs-on: macos-latest
@@ -79,6 +80,7 @@ jobs:
         with:
           name: my_app
           path: app_${{ runner.os }}_ver.${{ github.run_number }}
+          retention-days: 1
 
 #   test:
 #     runs-on: windows-latest
