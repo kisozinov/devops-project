@@ -52,20 +52,22 @@ jobs:
       matrix:
         os: [ubuntu-latest, macos-latest]
         gcc_o: ["-O0", "-O3"] 
+    env:
+      app_name: app_${{ runner.os }}${{ matrix.gcc_o }}_ver.${{ github.run_number }}
     # needs: [sys_info]
     
     steps:
       - uses: actions/checkout@v3
-    
+      
       - name: build
         run: |
-          g++ main.cpp ${{ matrix.gcc_o }} -o app_${{ runner.os }}${{ matrix.gcc_o }}_ver.${{ github.run_number }}
-          ./app_${{ runner.os }}${{ matrix.gcc_o }}_ver.${{ github.run_number }}
+          g++ main.cpp ${{ matrix.gcc_o }} -o ${{ env.app_name }}
+          ./${{ env.app_name }}
       - name: Download a Build Artifact
         uses: actions/upload-artifact@v3.0.0
         with:
           name: my_app
-          path: app_**
+          path: ${{ env.app_name }}
           retention-days: 1
           
 
