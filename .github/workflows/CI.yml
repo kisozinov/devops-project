@@ -102,10 +102,10 @@ jobs:
           to: ${{ secrets.TELEGRAM_TO }}
           token: ${{ secrets.TELEGRAM_TOKEN }}
           document: app-**, main.exe
-          photo: hello-world.png
+          photo: images/hello-world.png
           message: |
-            ✅${{ github.actor }} created commit at ${{ github.event.created_at }}
-            Commit message: ${{ github.event.payload.comment }}
+            ✅${{ github.actor }} created commit at ${{ github.created_at }}
+            Commit message: ${{ github.comment }}
             Repository: ${{ github.repository }}
             See changes: https://github.com/${{ github.repository }}/commit/${{github.sha}}
           
