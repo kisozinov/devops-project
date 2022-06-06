@@ -12,28 +12,26 @@ env:
   global_env: global
 
 jobs:
-  sys_info:
-    runs-on: windows-latest
-    env:
-      local_env: ${{ github.job }}
-    steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v3
+#   sys_info:
+#     runs-on: windows-latest
+#     env:
+#       local_env: ${{ github.job }}
+#     steps:
+#       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+#       - uses: actions/checkout@v3
         
-      - name: working directory
-        run: |
-          pwd
-          ls
-      - name: print env
-        run: env
-      - name : check tools
-        run: g++ -v
+#       - name: working directory
+#         run: |
+#           pwd
+#           ls
+#       - name: print env
+#         run: env
+#       - name : check tools
+#         run: g++ -v
       
-  build:
+  build-win:
     runs-on: windows-latest
-    needs: [sys_info]
-   # env:
-    #  local_env: job_print_env
+    # needs: [sys_info]
     
     steps:
       - uses: actions/checkout@v3
@@ -47,12 +45,47 @@ jobs:
         with:
           name: my_app
           path: app_${{ runner.os }}_ver.${{ github.run_number }}
-  test:
-    runs-on: windows-latest
-    needs: [sys_info, build]
+          
+  build-ubuntu:
+    runs-on: ubuntu-latest
+    # needs: [sys_info]
+    
     steps:
-      - name: run_test
-        run: sleep 20
+      - uses: actions/checkout@v3
+    
+      - name: build
+        run: |
+          g++ main.cpp -o app_${{ runner.os }}_ver.${{ github.run_number }}
+          ./app_${{ runner.os }}_ver.${{ github.run_number }}
+      - name: Download a Build Artifact
+        uses: actions/upload-artifact@v3.0.0
+        with:
+          name: my_app
+          path: app_${{ runner.os }}_ver.${{ github.run_number }}
+          
+  build-macos:
+    runs-on: macos-latest
+    # needs: [sys_info]
+    
+    steps:
+      - uses: actions/checkout@v3
+    
+      - name: build
+        run: |
+          g++ main.cpp -o app_${{ runner.os }}_ver.${{ github.run_number }}
+          ./app_${{ runner.os }}_ver.${{ github.run_number }}
+      - name: Download a Build Artifact
+        uses: actions/upload-artifact@v3.0.0
+        with:
+          name: my_app
+          path: app_${{ runner.os }}_ver.${{ github.run_number }}
+
+#   test:
+#     runs-on: windows-latest
+#     needs: [sys_info, build]
+#     steps:
+#       - name: run_test
+#         run: sleep 20
   #export:
     #runs-on: windows-latest
     
