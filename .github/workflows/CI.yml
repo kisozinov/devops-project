@@ -55,7 +55,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-20.04, macos-11]
-        gcc_o: ["-O0", "-O3"] 
+        gcc_o: ["-O3"] 
     env:
       app_name: app-${{ matrix.os }}${{ matrix.gcc_o }}-ver.${{ github.run_number }}
     
@@ -83,8 +83,8 @@ jobs:
           to: ${{ secrets.TELEGRAM_TO }}
           token: ${{ secrets.TELEGRAM_TOKEN }}
           message: |
-            ❌${{ github.actor }} created commit at ${{ github.event.created_at }}
-            Commit message: ${{ github.event.payload.comment }}
+            ❌${{ github.actor }} created commit at ${{ github.created_at }}
+            Commit message: ${{ github.comment }}
             Repository: ${{ github.repository }}
             See changes: https://github.com/${{ github.repository }}/commit/${{github.sha}}
       
@@ -103,7 +103,7 @@ jobs:
           token: ${{ secrets.TELEGRAM_TOKEN }}
           document: app-**
           message: |
-            ✔️${{ github.actor }} created commit at ${{ github.event.created_at }}
+            ✅${{ github.actor }} created commit at ${{ github.event.created_at }}
             Commit message: ${{ github.event.payload.comment }}
             Repository: ${{ github.repository }}
             See changes: https://github.com/${{ github.repository }}/commit/${{github.sha}}
