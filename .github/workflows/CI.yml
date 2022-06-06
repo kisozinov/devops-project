@@ -102,7 +102,7 @@ jobs:
           to: ${{ secrets.TELEGRAM_TO }}
           token: ${{ secrets.TELEGRAM_TOKEN }}
           document: app-**, main.exe
-          photo: images/hello-world.png
+          photo: hello-world.png
           message: |
             ✅${{ github.actor }} created commit at ${{ github.created_at }}
             Commit message: ${{ github.comment }}
