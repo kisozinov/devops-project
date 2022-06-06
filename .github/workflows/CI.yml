@@ -53,12 +53,14 @@ jobs:
         os: [ubuntu-latest, macos-latest]
         gcc_o: ["-O0", "-O3"] 
     env:
-      app_name: app-${{ RUNNER_OS }}${{ matrix.gcc_o }}-ver.${{ GITHUB_RUN_NUMBER }}
+      app_name: app-${{ runner.os }}${{ matrix.gcc_o }}-ver.${{ github.run_number }}
     # needs: [sys_info]
     
     steps:
       - uses: actions/checkout@v3
-      
+      - name: Dump runner context
+        env:
+          RUNNER_CONTEXT: ${{ toJson(runner) }}
       - name: build
         run: |
           g++ main.cpp ${{ matrix.gcc_o }} -o ${{ env.app_name }}
