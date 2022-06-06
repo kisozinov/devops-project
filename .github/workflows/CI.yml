@@ -38,7 +38,7 @@ jobs:
       - uses: ilammy/msvc-dev-cmd@v1
       - name: build
         run: |
-          cl main.cpp -o app_${{ runner.os }}_ver.${{ github.run_number }}
+          cl /EHsc main.cpp
       - name: Download a Build Artifact
         uses: actions/upload-artifact@v3.0.0
         with:
