@@ -71,7 +71,24 @@ jobs:
           name: my_app
           path: ${{ env.app_name }}
           retention-days: 1
-          
+  
+  report:
+    runs-on: ubuntu-20.04
+    needs: [ build-win, build-ubuntu-macos]
+    steps:
+      - name: send telegram message on push
+        uses: appleboy/telegram-action@master
+        with:
+          to: ${{ secrets.TELEGRAM_TO }}
+          token: ${{ secrets.TELEGRAM_TOKEN }}
+          message: |
+            ${{ github.actor }} created commit:
+            Commit message: ${{ github.event.commits[0].message }}
+            
+            Repository: ${{ github.repository }}
+            
+            See changes: https://github.com/${{ github.repository }}/commit/${{github.sha}}
+      
 
 #   test:
 #     runs-on: windows-latest
