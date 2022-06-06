@@ -12,22 +12,26 @@ env:
   global_env: global
 
 jobs:
-#   sys_info:
-#     runs-on: windows-latest
-#     env:
-#       local_env: ${{ github.job }}
-#     steps:
-#       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-#       - uses: actions/checkout@v3
+  sys_info:
+    runs-on: windows-latest
+    env:
+      local_env: ${{ github.job }}
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v3
         
-#       - name: working directory
-#         run: |
-#           pwd
-#           ls
-#       - name: print env
-#         run: env
-#       - name : check tools
-#         run: g++ -v
+      - name: working directory
+        run: |
+          pwd
+          ls
+      - name: print env
+        run: env
+      - name : check tools
+        run: g++ -v
+      - name: Dump runner context
+        env:
+          RUNNER_CONTEXT: ${{ toJson(runner) }}
+        run: echo "$RUNNER_CONTEXT"
       
   build-win:
     runs-on: windows-latest
@@ -52,15 +56,12 @@ jobs:
       matrix:
         os: [ubuntu-latest, macos-latest]
         gcc_o: ["-O0", "-O3"] 
-    
+    env:
+      app_name: app-${{ runner.os }}${{ matrix.gcc_o }}-ver.${{ github.run_number }}
     # needs: [sys_info]
     
     steps:
       - uses: actions/checkout@v3
-      - name: Dump runner context
-        env:
-          RUNNER_CONTEXT: ${{ toJson(runner) }}
-        run: echo "$RUNNER_CONTEXT"
       - name: set my_app name
         env:
           app_name: app-${{ runner.os }}${{ matrix.gcc_o }}-ver.${{ github.run_number }}
