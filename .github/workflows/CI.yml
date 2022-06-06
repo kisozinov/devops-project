@@ -104,8 +104,8 @@ jobs:
           document: app-**, main.exe
           photo: hello-world.png
           message: |
-            ✅${{ github.actor }} created commit at ${{ github.created_at }}
-            Commit message: ${{ github.comment }}
+            ✅${{ github.actor }} created commit at ${{ github.event.created_at }}
+            Commit message: ${{ github.event.action }}
             Repository: ${{ github.repository }}
             See changes: https://github.com/${{ github.repository }}/commit/${{github.sha}}
           
