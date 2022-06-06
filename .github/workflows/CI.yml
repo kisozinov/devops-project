@@ -34,7 +34,7 @@ jobs:
 #         run: echo "$RUNNER_CONTEXT"
       
   build-win:
-    runs-on: windows-latest
+    runs-on: windows-2022
     # needs: [sys_info]
     
     steps:
@@ -54,7 +54,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu-latest, macos-latest]
+        os: [ubuntu-20.04, macos-11]
         gcc_o: ["-O0", "-O3"] 
     env:
       app_name: app-${{ matrix.os }}${{ matrix.gcc_o }}-ver.${{ github.run_number }}
