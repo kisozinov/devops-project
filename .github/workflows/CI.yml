@@ -64,6 +64,7 @@ jobs:
       - name: set my_app name
         env:
           app_name: app-${{ runner.os }}${{ matrix.gcc_o }}-ver.${{ github.run_number }}
+        run: echo "${{ env.app_name }}
       - name: build
         run: |
           g++ main.cpp ${{ matrix.gcc_o }} -o ${{ env.app_name }}
