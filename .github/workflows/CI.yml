@@ -46,8 +46,11 @@ jobs:
           path: main.exe
           retention-days: 1
           
-  build-ubuntu:
-    runs-on: ubuntu-latest
+  build-ubuntu-macos:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest]
     # needs: [sys_info]
     
     steps:
@@ -64,23 +67,6 @@ jobs:
           path: app_${{ runner.os }}_ver.${{ github.run_number }}
           retention-days: 1
           
-  build-macos:
-    runs-on: macos-latest
-    # needs: [sys_info]
-    
-    steps:
-      - uses: actions/checkout@v3
-    
-      - name: build
-        run: |
-          g++ main.cpp -o app_${{ runner.os }}_ver.${{ github.run_number }}
-          ./app_${{ runner.os }}_ver.${{ github.run_number }}
-      - name: Download a Build Artifact
-        uses: actions/upload-artifact@v3.0.0
-        with:
-          name: my_app
-          path: app_${{ runner.os }}_ver.${{ github.run_number }}
-          retention-days: 1
 
 #   test:
 #     runs-on: windows-latest
