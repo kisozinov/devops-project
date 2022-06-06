@@ -58,7 +58,7 @@ jobs:
         gcc_o: ["-O0", "-O3"] 
     env:
       app_name: app-${{ runner.os }}${{ matrix.gcc_o }}-ver.${{ github.run_number }}
-    # needs: [sys_info]
+    needs: [sys_info]
     
     steps:
       - uses: actions/checkout@v3
