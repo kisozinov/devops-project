@@ -2,7 +2,7 @@ name: CI
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "main", "test" ]
   pull_request:
     branches: [ "main" ]
 
@@ -104,8 +104,8 @@ jobs:
           document: app-**, main.exe
           photo: hello-world.png
           message: |
-            ✅${{ github.actor }} created commit at ${{ github.event.created_at }}
-            Commit message: ${{ github.event.action }}
+            ✅${{ github.actor }} created commit:
+            Commit message: ${{ github.event.commits[0].message }} (if pushed)
             Repository: ${{ github.repository }}
             See changes: https://github.com/${{ github.repository }}/commit/${{github.sha}}
           
